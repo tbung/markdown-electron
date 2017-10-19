@@ -1,0 +1,18 @@
+{
+  "name": "markdown-electron",
+  "version": "0.0.1",
+  "description": "Markdown preview app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Till Bungert",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "1.7.9",
+    "electron-compile": "^6.4.2"
+  },
+  "dependencies": {
+    "@shd101wyy/mume": "^0.2.3"
+  }
+}
