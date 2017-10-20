@@ -36,8 +36,8 @@
             "electronInstallerDebian": {},
             "electronInstallerRedhat": {},
             "github_repository": {
-                "owner": "",
-                "name": ""
+                "owner": "tbung",
+                "name": "markdown-electron"
             },
             "windowsStoreConfig": {
                 "packageName": "",
