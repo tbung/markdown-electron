@@ -12,9 +12,9 @@ webview.style.width = '100%';
 webview.style.height = '100%';
 webview.style.border = 'none';
 webview.src = './loading.html';
-webview.preload = mume.utility.addFileProtocol(path.resolve(
-  mume.utility.extensionDirectoryPath,
-  './dependencies/electron-webview/preload.js'));
+// webview.preload = mume.utility.addFileProtocol(path.resolve(
+//   mume.utility.extensionDirectoryPath,
+//   './dependencies/electron-webview/preload.js'));
 
 document.body.appendChild(webview);
 
