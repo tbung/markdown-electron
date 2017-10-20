@@ -8,7 +8,7 @@
         "start": "electron-forge start",
         "package": "electron-forge package",
         "make": "electron-forge make",
-        "publish": "electron-forge publish",
+        "publish": "env-cmd .env electron-forge publish",
         "lint": "eslint src --color"
     },
     "keywords": [],
@@ -58,6 +58,7 @@
         "babel-preset-react": "^6.24.1",
         "electron-forge": "^4.1.2",
         "electron-prebuilt-compile": "1.7.9",
+        "env-cmd": "^7.0.0",
         "eslint": "^3",
         "eslint-config-airbnb": "^15",
         "eslint-config-google": "^0.9.1",
