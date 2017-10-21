@@ -29,7 +29,8 @@
                 ]
             },
             "electronPackagerConfig": {
-                "packageManager": "npm"
+                "packageManager": "npm",
+                "icon": "./assets/icons/icon"
             },
             "electronWinstallerConfig": {
                 "name": "markdown_electron"
