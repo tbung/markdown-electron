@@ -1,5 +1,4 @@
 import {ipcRenderer} from 'electron';
-import path from 'path';
 
 import * as mume from '@shd101wyy/mume';
 
@@ -18,11 +17,12 @@ webview.src = './loading.html';
 
 document.body.appendChild(webview);
 
-webview.addEventListener('dom-ready', () => {
-  _webviewDOMReady = true;
-});
+// let _webviewDOMReady = false;
+// webview.addEventListener('dom-ready', () => {
+//   _webviewDOMReady = true;
+// });
 
-/** 
+/**
  * This method renders a markdown file in the webview created above
  * @param {string} path - The path of the file to load
  */

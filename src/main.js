@@ -2,6 +2,11 @@ import {app, BrowserWindow, Menu} from 'electron';
 import path from 'path';
 import url from 'url';
 import menuTemplate from './menu/menu-template';
+import {addBypassChecker} from 'electron-compile';
+
+addBypassChecker((filePath) => {
+  return path.normalize(filePath).indexOf(__dirname) === -1;
+});
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
