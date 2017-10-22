@@ -49,6 +49,7 @@
     },
     "dependencies": {
         "@shd101wyy/mume": "^0.2.3",
+        "chokidar": "^1.7.0",
         "electron-compile": "^6.4.2",
         "electron-squirrel-startup": "^1.0.0"
     },

@@ -1,4 +1,5 @@
 import {ipcRenderer} from 'electron';
+import chokidar from 'chokidar';
 
 import * as mume from '@shd101wyy/mume';
 
@@ -57,4 +58,12 @@ async function renderMd(path) {
 
 ipcRenderer.on('file-opened', (event, file, content) => {
   renderMd(file);
+
+  let watcher = chokidar.watch(file, {
+    peristent: true,
+  });
+
+  watcher.on('change', (file) => {
+    renderMd(file);
+  });
 });
