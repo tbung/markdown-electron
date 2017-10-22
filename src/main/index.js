@@ -1,12 +1,13 @@
 import {app, BrowserWindow, Menu} from 'electron';
 import path from 'path';
 import url from 'url';
-import menuTemplate from './menu/menu-template';
-import {addBypassChecker} from 'electron-compile';
+import {menuTemplate} from './menu';
+// import {addBypassChecker} from 'electron-compile';
 
-addBypassChecker((filePath) => {
-  return path.normalize(filePath).indexOf(__dirname) === -1;
-});
+// addBypassChecker((filePath) => {
+//   return path.normalize(filePath).indexOf(__dirname) === -1;
+// });
+const isDevelopment = false; //process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,18 +17,23 @@ let win;
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+    console.log(__dirname);
+    console.log(app.getAppPath());
+    console.log(process.env.NODE_ENV);
+    const index = isDevelopment
+    ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+        : `file://${app.getAppPath()}/static/index.html`
   // Create the browser window.
   win = new BrowserWindow({
     width: 800, height: 600,
-    icon: path.join(__dirname, '..', 'assets/icons/icon.png'),
+    icon: path.join(app.getAppPath(), 'static', 'icons', 'icon.png'),
+      webPreferences: {
+    webSecurity: false
+  }
   });
 
   // and load the index.html of the app.
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, 'app.html'),
-    protocol: 'file:',
-    slashes: true,
-  }));
+  win.loadURL(index);
 
   // Emitted when the window is closed.
   win.on('closed', () => {

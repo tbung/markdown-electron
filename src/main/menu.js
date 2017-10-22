@@ -17,7 +17,7 @@ function openFile(win) {
   win.setTitle(file);
 }
 
-module.exports = (win) => {
+export function menuTemplate(win) {
   return [
     {
       label: 'File',

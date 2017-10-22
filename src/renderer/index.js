@@ -1,22 +1,35 @@
 import {ipcRenderer} from 'electron';
 import chokidar from 'chokidar';
+import path from 'path';
 
 import * as mume from '@shd101wyy/mume';
 
+const appDiv = document.getElementById('app')
+appDiv.style.width = '100vw';
+appDiv.style.height = '100vh';
+appDiv.style.margin = '0';
+appDiv.style.padding = '0';
+document.body.style.margin = '0';
+document.body.style.padding = '0';
+document.body.style.overflow = 'hidden';
 // Webview for markdown preview.
 // Please note that the webview will load
 // the controller script at:
 // https://github.com/shd101wyy/mume/blob/master/src/webview.ts
 const webview = document.createElement('webview');
-webview.style.width = '100%';
 webview.style.height = '100%';
+webview.style.width = '100%';
 webview.style.border = 'none';
-webview.src = './loading.html';
+webview.style.display = 'inline-flex';
+// webview.style.overflow = 'hidden';
+
+const index = path.join(__dirname, "..", "static", "loading.html");
+webview.src = `file://${index}`;
 // webview.preload = mume.utility.addFileProtocol(path.resolve(
 //   mume.utility.extensionDirectoryPath,
 //   './dependencies/electron-webview/preload.js'));
 
-document.body.appendChild(webview);
+appDiv.appendChild(webview);
 
 // let _webviewDOMReady = false;
 // webview.addEventListener('dom-ready', () => {
