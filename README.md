@@ -12,20 +12,16 @@ Download and unpack the latest release from the releases section.
 ### From Source
 
 1. Install recent `nodejs` and `npm`.
-2. Install [electron-forge](https://electronforge.io/)
-    ```
-    npm install -g electron-forge
-    ```
-3. Clone this repo
+2. Clone this repo
     ```
     git clone https://github.com/tbung/markdown-electron.git
     cd markdown-electron
     ```
-4. Install dependencies
+3. Install dependencies
     ```
     npm install
     ```
-5. Run the app
+4. Run the app
     ```
     npm start
     ```

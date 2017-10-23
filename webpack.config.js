@@ -1,55 +1,90 @@
+const nodeExternals = require('webpack-node-externals');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+const path = require('path');
 
-/**
- * Base webpack config used across other specific configs
- */
-
-import path from 'path';
-import webpack from 'webpack';
-import { dependencies as externals } from './app/package.json';
-
-export default {
-  externals: Object.keys(externals || {}),
-    devtool: 'source-map',
-
+const mainConfig = {
+  entry: {
+    main: './src/main/index.js'
+  },
   target: 'electron-main',
-
-  entry: './app/main.dev',
-
-  // 'main.js' in root
   output: {
-    path: __dirname,
-    filename: './app/main.prod.js'
+    path: path.join(__dirname, 'app'),
+    filename: 'main.bundle.js'
   },
-
+  node: {
+    __dirname: false,
+    __filename: false
+  },
   module: {
-    rules: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          cacheDirectory: true
-        }
-      }
-    }]
+    rules: [
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
+      { test: /\.json$/, loader: 'json-loader' }
+    ]
   },
-
-  /**
-   * Determine the array of extensions that should be used to resolve modules.
-   */
   resolve: {
-    extensions: ['.js', '.jsx', '.json'],
-    modules: [
-      path.join(__dirname, 'app'),
-      'node_modules',
-    ],
+    mainFields: ['module', 'main'],
+    extensions: ['.js', '.jsx']
   },
-
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
-    }),
-
-    new webpack.NamedModulesPlugin(),
-  ],
+  plugins: [new webpack.IgnorePlugin(/\.(css|less)$/)]
 };
+
+const rendererConfig = {
+  entry: {
+    app: './src/renderer/index.js',
+  },
+  externals: [nodeExternals()],
+  target: 'electron-renderer',
+  output: {
+    path: path.join(__dirname, 'app'),
+    filename: 'renderer.bundle.js'
+  },
+  module: {
+    rules: [
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
+      { test: /\.json$/, loader: 'json-loader' },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader'
+        })
+      },
+      {
+        test: /\.node$/,
+        use: 'node-loader'
+      },
+      {
+        test: /\.less$/,
+        use: [{
+          loader: 'style-loader' // creates style nodes from JS strings
+        }, {
+          loader: 'css-loader' // translates CSS into CommonJS
+        }, {
+          loader: 'less-loader' // compiles Less to CSS
+        }]
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000
+            }
+          }
+        ]
+      }
+    ]
+  },
+  resolve: {
+    mainFields: ['module', 'main'],
+    extensions: ['.js', '.jsx'],
+  },
+  plugins: [
+    // new webpack.IgnorePlugin(/\.less$/),
+    new ExtractTextPlugin('styles.css')
+  ]
+};
+
+module.exports = [mainConfig, rendererConfig];

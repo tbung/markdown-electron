@@ -1,5 +1,5 @@
-out
 dist
+app
 .env
 
 # Created by https://www.gitignore.io/api/node
