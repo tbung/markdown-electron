@@ -22,8 +22,7 @@ webview.style.width = '100%';
 webview.style.border = 'none';
 webview.style.display = 'inline-flex';
 
-const index = path.join(__dirname, '..', 'static', 'loading.html');
-webview.src = `file://${index}`;
+webview.src = `file://${app.getAppPath()}/static/loading.html`;
 
 appDiv.appendChild(webview);
 
