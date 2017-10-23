@@ -25,7 +25,7 @@ app.on('ready', () => {
 
   // since the BrowserWindow event ready-to-show currently does not fire
   // we use dom-ready to load files given as arguments
-  win.webContents.once('dom-ready', () => {
+  win.webContents.once('did-finish-load', () => {
     console.log('test');
     if (process.argv.length >= 2) {
       let openFilePath = process.argv[1];
