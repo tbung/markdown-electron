@@ -12,7 +12,6 @@ function openFile(win) {
   if (!files) return;
 
   const file = files[0];
-
   win.webContents.send('file-opened', file);
   win.setTitle(file);
 }

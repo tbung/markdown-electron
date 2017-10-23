@@ -18,6 +18,7 @@ app.on('ready', () => {
     webPreferences: {
       webSecurity: false,
     },
+    show: false,
   });
 
   // and load the index.html of the app.
@@ -26,7 +27,7 @@ app.on('ready', () => {
   // since the BrowserWindow event ready-to-show currently does not fire
   // we use dom-ready to load files given as arguments
   win.webContents.once('did-finish-load', () => {
-    console.log('test');
+    win.show();
     if (process.argv.length >= 2) {
       let openFilePath = process.argv[1];
       console.log(openFilePath);

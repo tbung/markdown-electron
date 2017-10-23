@@ -3,28 +3,9 @@ import chokidar from 'chokidar';
 
 import * as mume from '@shd101wyy/mume';
 
-// set some style values for the app div
-// TODO: Export to style.css
-const appDiv = document.getElementById('app');
-appDiv.style.width = '100vw';
-appDiv.style.height = '100vh';
-appDiv.style.margin = '0';
-appDiv.style.padding = '0';
-document.body.style.margin = '0';
-document.body.style.padding = '0';
-document.body.style.overflow = 'hidden';
 
 // Webview for markdown preview.
-const webview = document.createElement('webview');
-webview.style.height = '100%';
-webview.style.width = '100%';
-webview.style.border = 'none';
-webview.style.display = 'inline-flex';
-
-webview.src = `file://${remote.app.getAppPath()}/static/loading.html`;
-
-appDiv.appendChild(webview);
-
+const webview = document.getElementById('md-render');
 
 /**
  * This method renders a markdown file in the webview created above
