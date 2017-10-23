@@ -4,7 +4,9 @@ import path from 'path';
 
 import * as mume from '@shd101wyy/mume';
 
-const appDiv = document.getElementById('app')
+// set some style values for the app div
+// TODO: Export to style.css
+const appDiv = document.getElementById('app');
 appDiv.style.width = '100vw';
 appDiv.style.height = '100vh';
 appDiv.style.margin = '0';
@@ -12,29 +14,19 @@ appDiv.style.padding = '0';
 document.body.style.margin = '0';
 document.body.style.padding = '0';
 document.body.style.overflow = 'hidden';
+
 // Webview for markdown preview.
-// Please note that the webview will load
-// the controller script at:
-// https://github.com/shd101wyy/mume/blob/master/src/webview.ts
 const webview = document.createElement('webview');
 webview.style.height = '100%';
 webview.style.width = '100%';
 webview.style.border = 'none';
 webview.style.display = 'inline-flex';
-// webview.style.overflow = 'hidden';
 
-const index = path.join(__dirname, "..", "static", "loading.html");
+const index = path.join(__dirname, '..', 'static', 'loading.html');
 webview.src = `file://${index}`;
-// webview.preload = mume.utility.addFileProtocol(path.resolve(
-//   mume.utility.extensionDirectoryPath,
-//   './dependencies/electron-webview/preload.js'));
 
 appDiv.appendChild(webview);
 
-// let _webviewDOMReady = false;
-// webview.addEventListener('dom-ready', () => {
-//   _webviewDOMReady = true;
-// });
 
 /**
  * This method renders a markdown file in the webview created above
@@ -69,6 +61,7 @@ async function renderMd(path) {
   }
 }
 
+// emitted when the main process wants us to open and display a file
 ipcRenderer.on('file-opened', (event, file, content) => {
   renderMd(file);
 

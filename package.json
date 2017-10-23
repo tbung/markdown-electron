@@ -4,7 +4,7 @@
   "main": "./app/main.bundle.js",
   "description": "Feature-rich markdown viewer",
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "rimraf dist app",
     "compile": "webpack --config webpack.config.js --progress --colors",
     "start": "npm run compile && electron .",
     "pack": "npm run clean && npm run compile && electron-builder --dir",

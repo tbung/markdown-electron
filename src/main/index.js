@@ -1,13 +1,6 @@
 import {app, BrowserWindow, Menu} from 'electron';
 import path from 'path';
-import url from 'url';
 import {menuTemplate} from './menu';
-// import {addBypassChecker} from 'electron-compile';
-
-// addBypassChecker((filePath) => {
-//   return path.normalize(filePath).indexOf(__dirname) === -1;
-// });
-const isDevelopment = false; //process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -17,23 +10,31 @@ let win;
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-    console.log(__dirname);
-    console.log(app.getAppPath());
-    console.log(process.env.NODE_ENV);
-    const index = isDevelopment
-    ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
-        : `file://${app.getAppPath()}/static/index.html`
+  const index = `file://${app.getAppPath()}/static/index.html`;
   // Create the browser window.
   win = new BrowserWindow({
     width: 800, height: 600,
     icon: path.join(app.getAppPath(), 'static', 'icons', 'icon.png'),
-      webPreferences: {
-    webSecurity: false
-  }
+    webPreferences: {
+      webSecurity: false,
+    },
   });
 
   // and load the index.html of the app.
   win.loadURL(index);
+
+  // since the BrowserWindow event ready-to-show currently does not fire
+  // we use dom-ready to load files given as arguments
+  win.webContents.once('dom-ready', () => {
+    console.log('test');
+    if (process.argv.length >= 2) {
+      let openFilePath = process.argv[1];
+      console.log(openFilePath);
+      win.webContents.send('file-opened', openFilePath);
+      win.setTitle(openFilePath);
+    }
+  });
+
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -45,6 +46,7 @@ app.on('ready', () => {
   const menu = Menu.buildFromTemplate(menuTemplate(win));
   Menu.setApplicationMenu(menu);
 });
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -62,6 +64,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
