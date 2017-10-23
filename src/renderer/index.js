@@ -1,6 +1,5 @@
-import {ipcRenderer} from 'electron';
+import {ipcRenderer, remote} from 'electron';
 import chokidar from 'chokidar';
-import path from 'path';
 
 import * as mume from '@shd101wyy/mume';
 
@@ -22,7 +21,7 @@ webview.style.width = '100%';
 webview.style.border = 'none';
 webview.style.display = 'inline-flex';
 
-webview.src = `file://${app.getAppPath()}/static/loading.html`;
+webview.src = `file://${remote.app.getAppPath()}/static/loading.html`;
 
 appDiv.appendChild(webview);
 
