@@ -19,12 +19,7 @@ async function renderMd(path) {
 
   const engine = new mume.MarkdownEngine({
     filePath: path,
-    config: {
-      previewTheme: 'github-light.css',
-      codeBlockTheme: 'default.css',
-      printBackground: true,
-      mathRenderingOption: 'MathJax',
-    },
+    config: mume.utility.getExtensionConfig(),
   });
 
   const html = await engine.generateHTMLTemplateForPreview({
