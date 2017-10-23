@@ -9,6 +9,7 @@
     "start": "npm run compile && electron .",
     "pack": "npm run clean && npm run compile && electron-builder --dir",
     "dist": "npm run clean && npm run compile && electron-builder",
+    "publish": "npm run clean && npm run compile && env-cmd .env electron-builder -p always",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -46,7 +47,6 @@
     "linux": {
       "maintainer": "Till Bungert",
       "target": [
-        "deb",
         "zip"
       ],
       "desktop": {
@@ -74,6 +74,7 @@
     "babel-loader": "^7.1.2",
     "electron": "^1.7.9",
     "electron-builder": "^19.37.2",
+    "env-cmd": "^7.0.0",
     "eslint": "^4.9.0",
     "eslint-config-google": "^0.9.1",
     "extract-text-webpack-plugin": "^3.0.1",
