@@ -35,15 +35,26 @@ async function renderMd(path) {
   }
 }
 
-// emitted when the main process wants us to open and display a file
-ipcRenderer.on('file-opened', (event, file, content) => {
-  renderMd(file);
+let curFile;
 
-  let watcher = chokidar.watch(file, {
-    peristent: true,
-  });
-
-  watcher.on('change', (file) => {
-    renderMd(file);
-  });
+let watcher = new chokidar.FSWatcher({
+  usePolling: true,
 });
+
+watcher.on('add', (f) => {
+  renderMd(f);
+});
+
+watcher.on('change', (f) => {
+  renderMd(f);
+});
+
+// emitted when the main process wants us to open and display a file
+ipcRenderer.on('file-opened', (event, file) => {
+  if (curFile) {
+    watcher.unwatch(curFile);
+  }
+  curFile = file;
+  watcher.add(file);
+});
+
