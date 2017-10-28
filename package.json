@@ -1,6 +1,6 @@
 {
   "name": "markdown-electron",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "./app/main.bundle.js",
   "description": "Feature-rich markdown viewer",
   "scripts": {
