@@ -1,5 +1,6 @@
 import {app, BrowserWindow, Menu} from 'electron';
 import path from 'path';
+import fs from 'fs';
 import {menuTemplate} from './menu';
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -31,8 +32,10 @@ app.on('ready', () => {
     if (process.argv.length >= 2) {
       let openFilePath = process.argv[1];
       console.log(openFilePath);
-      win.webContents.send('file-opened', openFilePath);
-      win.setTitle(openFilePath);
+      if (fs.statSync(openFilePath).isFile()) {
+        win.webContents.send('file-opened', openFilePath);
+        win.setTitle(openFilePath);
+      }
     }
   });
 
