@@ -1,11 +1,31 @@
-import {ipcRenderer, remote} from 'electron';
+import {ipcRenderer} from 'electron';
 import chokidar from 'chokidar';
+import path from 'path';
 
 import * as mume from '@shd101wyy/mume';
 
 
 // Webview for markdown preview.
 const webview = document.getElementById('md-render');
+
+// Loads communication methods: webview <-> renderer process
+webview.preload = mume.utility.addFileProtocol(path.resolve(
+  mume.utility.extensionDirectoryPath,
+  './dependencies/electron-webview/preload.js'
+));
+
+// Current mume engine, each new file gets a new engine
+let engine;
+
+// The currently viewed file
+// TODO: find better solution than global reference
+let curFile;
+
+// The file watcher for the current file
+let watcher = new chokidar.FSWatcher({
+  usePolling: true,
+});
+
 
 /**
  * This method renders a markdown file in the webview created above
@@ -17,10 +37,6 @@ async function renderMd(path) {
     suffix: '.html'});
   let htmlFilePath = info.path;
 
-  const engine = new mume.MarkdownEngine({
-    filePath: path,
-    config: mume.utility.getExtensionConfig(),
-  });
 
   const html = await engine.generateHTMLTemplateForPreview({
     head: '',
@@ -35,19 +51,17 @@ async function renderMd(path) {
   }
 }
 
-let curFile;
-let scrollPos = 0;
-
-let watcher = new chokidar.FSWatcher({
-  usePolling: true,
-});
 
 watcher.on('add', (f) => {
-  scrollPos = 0;
+  engine = new mume.MarkdownEngine({
+    filePath: f,
+    config: mume.utility.getExtensionConfig(),
+  });
   renderMd(f);
 });
 
 watcher.on('change', (f) => {
+  let scrollPos = 0;
   webview.executeJavaScript(
     `document.getElementsByClassName('mume markdown-preview')[1].scrollTop`,
     false,
@@ -57,14 +71,28 @@ watcher.on('change', (f) => {
     }
   );
 
+  engine.clearCaches();
+
   renderMd(f);
+
+  // Everytime the dom is ready we scroll to the saved position
+  webview.addEventListener('dom-ready', () => {
+    // webview.openDevTools();
+    webview.executeJavaScript(
+      `document.getElementsByClassName('mume markdown-preview')[1].scrollTop =
+    ${scrollPos}`
+    );
+  });
 });
 
-webview.addEventListener('dom-ready', () => {
-  webview.executeJavaScript(
-    `document.getElementsByClassName('mume markdown-preview')[1].scrollTop =
-    ${scrollPos}`
-  );
+
+// Handle mume export menu requests
+webview.addEventListener('ipc-message', (event) => {
+  console.log(event);
+  const command = event.args[0].data['command'];
+  if (command === 'phantomjsExport') {
+    engine.phantomjsExport({fileType: 'pdf', openFileAfterGeneration: true});
+  }
 });
 
 // emitted when the main process wants us to open and display a file
