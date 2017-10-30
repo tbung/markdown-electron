@@ -25,3 +25,12 @@ Download and unpack the latest release from the releases section.
     ```
     npm start
     ```
+5. Build the app
+    ```
+    npm run dist
+    ```
+    or (for Windows and Linux)
+    ```
+    npm run dist -- -wl
+    ```
+
