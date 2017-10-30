@@ -5,7 +5,7 @@ import {dialog} from 'electron';
  * @param {BrowserWindow} win - the currently active window
  */
 function openFile(win) {
-  const files = dialog.showOpenDialog({
+  const files = dialog.showOpenDialog(win, {
     properties: ['openFile'],
   });
 
