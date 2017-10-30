@@ -36,17 +36,35 @@ async function renderMd(path) {
 }
 
 let curFile;
+let scrollPos = 0;
 
 let watcher = new chokidar.FSWatcher({
   usePolling: true,
 });
 
 watcher.on('add', (f) => {
+  scrollPos = 0;
   renderMd(f);
 });
 
 watcher.on('change', (f) => {
+  webview.executeJavaScript(
+    `document.getElementsByClassName('mume markdown-preview')[1].scrollTop`,
+    false,
+    (n) => {
+      scrollPos = n;
+      console.log(n);
+    }
+  );
+
   renderMd(f);
+});
+
+webview.addEventListener('dom-ready', () => {
+  webview.executeJavaScript(
+    `document.getElementsByClassName('mume markdown-preview')[1].scrollTop =
+    ${scrollPos}`
+  );
 });
 
 // emitted when the main process wants us to open and display a file
