@@ -4,6 +4,8 @@ import path from 'path';
 
 import * as mume from '@shd101wyy/mume';
 
+mume.init();
+
 
 // Webview for markdown preview.
 const webview = document.getElementById('md-render');
@@ -39,8 +41,6 @@ async function renderMd(path) {
 
 
   const html = await engine.generateHTMLTemplateForPreview({
-    head: '',
-    body: ' ',
   });
   await mume.utility.writeFile(htmlFilePath, html, {encoding: 'utf-8'});
 
@@ -57,6 +57,7 @@ watcher.on('add', (f) => {
     filePath: f,
     config: mume.utility.getExtensionConfig(),
   });
+  console.log(mume.utility.getExtensionConfig());
   renderMd(f);
 });
 
