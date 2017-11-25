@@ -7,6 +7,17 @@ $$
 \frac{1}{2}
 $$
 
+$$
+\texttt{asdf}
+$$
+
+$$
+\begin{align*}
+    a &= b \\
+        &= c
+\end{align*}
+$$
+
 ---
 
 ```python
