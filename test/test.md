@@ -1,4 +1,4 @@
-# Hello 2
+# Hello
 ## Test 2
 
 Hello World! Test watcher!

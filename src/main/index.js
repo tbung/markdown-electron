@@ -3,6 +3,9 @@ import path from 'path';
 import fs from 'fs';
 import {menuTemplate} from './menu';
 
+// Always be production unless told otherwise
+if (process.env.NODE_ENV === undefined) process.env.NODE_ENV = 'production';
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
