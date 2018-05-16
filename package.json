@@ -76,7 +76,7 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-loader": "^7.1.2",
-    "electron": "^1.7.9",
+    "electron": "2.0.0",
     "electron-builder": "^19.37.2",
     "env-cmd": "^7.0.0",
     "eslint": "^4.9.0",
