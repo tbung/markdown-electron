@@ -1,4 +1,4 @@
-import {app, BrowserWindow, Menu} from 'electron';
+import {app, ipcMain, shell, BrowserWindow, Menu} from 'electron';
 import path from 'path';
 import fs from 'fs';
 import {menuTemplate} from './menu';
@@ -42,6 +42,19 @@ app.on('ready', () => {
     }
   });
 
+  // make clicked urls open in default browser
+  const disableExternalNavigate = (event, url) => {
+    event.preventDefault();
+    shell.openExternal(url);
+  };
+
+  ipcMain.on('webview-disable-external-navigate', (event, enabled) => {
+    if (enabled) {
+      event.sender.on('will-navigate', disableExternalNavigate);
+    } else {
+      event.sender.removeListener('will-navigate', disableExternalNavigate);
+    }
+  });
 
   // Emitted when the window is closed.
   win.on('closed', () => {

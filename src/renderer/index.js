@@ -1,6 +1,5 @@
 import {ipcRenderer} from 'electron';
 import chokidar from 'chokidar';
-import path from 'path';
 
 import * as mume from '@shd101wyy/mume';
 
@@ -10,12 +9,6 @@ console.log(NODE_ENV);
 
 // Webview for markdown preview.
 const webview = document.getElementById('md-render');
-
-// Loads communication methods: webview <-> renderer process
-webview.preload = mume.utility.addFileProtocol(path.resolve(
-  mume.utility.extensionDirectoryPath,
-  './dependencies/electron-webview/preload.js'
-));
 
 // Current mume engine, each new file gets a new engine
 let engine;
@@ -28,7 +21,6 @@ let curFile;
 let watcher = new chokidar.FSWatcher({
   usePolling: true,
 });
-
 
 /**
  * This method renders a markdown file in the webview created above
@@ -55,7 +47,6 @@ async function renderMd(path) {
     webview.loadURL(mume.utility.addFileProtocol(htmlFilePath));
   }
 }
-
 
 watcher.on('add', (f) => {
   engine = new mume.MarkdownEngine({
@@ -89,17 +80,6 @@ watcher.on('change', (f) => {
     ${scrollPos}`
     );
   });
-});
-
-
-// Handle mume export menu requests
-webview.addEventListener('ipc-message', (event) => {
-  console.log(event);
-  const command = event.args[0].data['command'];
-  if (command === 'chromeExport') {
-    console.log('It werks!');
-    engine.chromeExport({filetype: event.args[0].data['args'][1]});
-  }
 });
 
 // emitted when the main process wants us to open and display a file
