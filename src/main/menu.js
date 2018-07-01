@@ -28,6 +28,13 @@ export function menuTemplate(win) {
             openFile(win);
           },
         },
+        {
+          label: 'Export PDF',
+          accelerator: 'CmdOrCtrl+P',
+          click: () => {
+            win.webContents.send('exportPDF');
+          },
+        },
       ],
     },
     {
