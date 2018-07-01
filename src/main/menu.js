@@ -6,6 +6,10 @@ import {dialog} from 'electron';
  */
 function openFile(win) {
   const files = dialog.showOpenDialog(win, {
+    filters: [
+      {name: 'Markdown Files', extensions: ['md']},
+      {name: 'All Files', extensions: ['*']},
+    ],
     properties: ['openFile'],
   });
 
