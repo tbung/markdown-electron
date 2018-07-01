@@ -12,10 +12,10 @@ $$
 $$
 
 $$
-\begin{align*}
+\begin{aligned}
     a &= b \\
-        &= c
-\end{align*}
+      &= c
+\end{aligned}
 $$
 
 ---

@@ -1,6 +1,7 @@
 dist
 app
 .env
+*.pdf
 
 # Created by https://www.gitignore.io/api/node
 
