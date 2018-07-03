@@ -99,27 +99,49 @@ async function exportPDF() {
   const basepath = path.join(path.dirname(curFile), basename);
   const pdfPath = `${basepath}.pdf`;
 
-  webview.insertCSS(`
-    @media print {
-      body {
-        overflow: visible;
-      }
-    }
-  `);
+  let webviewPrint = document.getElementById('md-render-print');
 
-  webview.printToPDF(
-    {
-      pageSize: 'A4',
-      printBackground: false,
-      fitToPageEnabled: true,
-    },
-    (error, data) => {
-      if (error) throw error;
+  const inputString = await mume.utility.readFile(engine.filePath, {
+    encoding: 'utf-8',
+  });
+  let html;
+  let yamlConfig;
+  ({html, yamlConfig} = await engine.parseMD(inputString, {
+    useRelativeFilePath: false,
+    hideFrontMatter: true,
+    isForPreview: false,
+    runAllCodeChunks: false,
+  }));
 
-      fs.writeFile(pdfPath, data, error_fs => {
-        console.log('PDF exported');
-      });
+  html = await engine.generateHTMLTemplateForExport(html, yamlConfig, {
+    isForPrint: true,
+    isForPrince: false,
+    embedLocalImages: false,
+    offline: true,
+  });
+
+  const info = await mume.utility.tempOpen({prefix: 'mume', suffix: '.html'});
+  await mume.utility.writeFile(info.path, html);
+
+  webviewPrint.loadURL(mume.utility.addFileProtocol(info.path));
+
+  webviewPrint.addEventListener('dom-ready', () => {
+    webviewPrint.printToPDF(
+      {
+        pageSize: 'A4',
+        printBackground: false,
+        fitToPageEnabled: true,
+      },
+      (error, data) => {
+        if (error) throw error;
+
+        fs.writeFile(pdfPath, data, error_fs => {
+          console.log('PDF exported');
+        });
     });
+    webviewPrint.loadURL('about:blank');
+    webviewPrint = null;
+  });
 };
 
 ipcRenderer.on('exportPDF', (event, file) => {

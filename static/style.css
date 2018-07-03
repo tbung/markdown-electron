@@ -16,10 +16,14 @@ body {
     width: 100%;
     border: none;
     display: inline-flex;
+    overflow: visible;
 }
 
-@media print {
-    #md-render {
-        overflow: visible;
-    }
+#md-render-print {
+    height: 0;
+    width: 0;
+    border: none;
+    display: block;
+    overflow: visible;
+    visibility: hidden;
 }
