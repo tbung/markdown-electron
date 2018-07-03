@@ -1,6 +1,9 @@
 import {ipcRenderer} from 'electron';
 import chokidar from 'chokidar';
 
+import * as path from 'path';
+import * as fs from 'fs';
+
 import * as mume from '@shd101wyy/mume';
 
 mume.init();
@@ -91,8 +94,34 @@ ipcRenderer.on('file-opened', (event, file) => {
   watcher.add(file);
 });
 
-ipcRenderer.on('exportPDF', (event, file) => {
-    engine.chromeExport({
-        filetype: 'pdf',
+async function exportPDF() {
+  const basename = path.basename(curFile, '.md');
+  const basepath = path.join(path.dirname(curFile), basename);
+  const pdfPath = `${basepath}.pdf`;
+
+  webview.insertCSS(`
+    @media print {
+      body {
+        overflow: visible;
+      }
+    }
+  `);
+
+  webview.printToPDF(
+    {
+      pageSize: 'A4',
+      printBackground: false,
+      fitToPageEnabled: true,
+    },
+    (error, data) => {
+      if (error) throw error;
+
+      fs.writeFile(pdfPath, data, error_fs => {
+        console.log('PDF exported');
+      });
     });
+};
+
+ipcRenderer.on('exportPDF', (event, file) => {
+  exportPDF();
 });

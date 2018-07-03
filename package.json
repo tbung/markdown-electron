@@ -68,15 +68,14 @@
       "static",
       "app"
     ],
-    "extraResources": [
-      "node_modules/@shd101wyy/mume/dependencies/phantomjs"
-    ]
+    "extraResources": []
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.5",
     "babel-loader": "^7.1.2",
-    "electron": "2.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "electron": "2.0.3",
     "electron-builder": "^19.37.2",
     "env-cmd": "^7.0.0",
     "eslint": "^4.9.0",

@@ -17,3 +17,9 @@ body {
     border: none;
     display: inline-flex;
 }
+
+@media print {
+    #md-render {
+        overflow: visible;
+    }
+}
