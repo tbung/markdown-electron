@@ -62,11 +62,31 @@ watcher.on('add', (f) => {
 
 watcher.on('change', (f) => {
   let scrollPos = 0;
+  let scrollHeight = 0;
+  let isMax = false;
   webview.executeJavaScript(
     `document.getElementsByClassName('mume markdown-preview')[1].scrollTop`,
     false,
     (n) => {
       scrollPos = n;
+      console.log(n);
+    }
+  );
+
+  webview.executeJavaScript(
+    `document.getElementsByClassName('mume markdown-preview')[1].scrollHeight`,
+    false,
+    (n) => {
+      scrollHeight = n;
+      console.log(n);
+    }
+  );
+
+  webview.executeJavaScript(
+    `document.getElementsByClassName('mume markdown-preview')[1].clientHeight`,
+    false,
+    (n) => {
+      isMax = (scrollHeight - scrollPos === n);
       console.log(n);
     }
   );
@@ -77,10 +97,18 @@ watcher.on('change', (f) => {
 
   // Everytime the dom is ready we scroll to the saved position
   webview.addEventListener('dom-ready', () => {
-    // webview.openDevTools();
+    webview.executeJavaScript(
+      `document.getElementsByClassName('mume markdown-preview')[1].scrollHeight`,
+      false,
+      (n) => {
+        scrollHeight = n;
+        console.log(n);
+      }
+    );
+
     webview.executeJavaScript(
       `document.getElementsByClassName('mume markdown-preview')[1].scrollTop =
-    ${scrollPos}`
+    ${isMax ? scrollHeight : scrollPos}`
     );
   });
 });
