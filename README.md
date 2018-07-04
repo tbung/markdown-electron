@@ -33,27 +33,3 @@ Download and unpack the latest release from the releases section.
     ```
     npm run dist -- -wl
     ```
-
-## PDF Export
-
-For pdf export you need to install puppeteer globally. 
-```
-npm i -g puppeteer
-```
-
-To fix any sandbox related issues on linux you need to point the environment
-variable `CHROME_DEVEL_SANDBOX` to the appropriate binary (in some file that
-gets sourced on login). For example on Arch Linux using an installed `google-chrome`:
-```shell
-export CHROME_DEVEL_SANDBOX=/opt/google/chrome/chrome-sandbox
-```
-or using an installed `chromium`:
-```
-export CHROME_DEVEL_SANDBOX=/usr/lib/chromium/chrome-sandbox
-```
-
-## Note on MathJax
-
-[MathJax support is currently broken in the underlying render library](https://github.com/shd101wyy/markdown-preview-enhanced/issues/775), please
-use KaTeX. An overview of features supported by KaTeX can be found
-[here](https://khan.github.io/KaTeX/function-support.html).
