@@ -86,7 +86,7 @@
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
-    "@shd101wyy/mume": "^0.2.3",
+    "@shd101wyy/mume": "^0.3.3",
     "chokidar": "^1.7.0",
     "source-map-support": "^0.5.0"
   }
