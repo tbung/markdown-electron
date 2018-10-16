@@ -23,6 +23,7 @@ app.on('ready', () => {
       webSecurity: false,
     },
     show: false,
+    autoHideMenuBar: true,
   });
 
   // and load the index.html of the app.
