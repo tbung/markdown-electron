@@ -75,7 +75,7 @@
     "babel-eslint": "^8.2.5",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "electron": "2.0.3",
+    "electron": "2.0.8",
     "electron-builder": "^19.37.2",
     "env-cmd": "^7.0.0",
     "eslint": "^4.9.0",
