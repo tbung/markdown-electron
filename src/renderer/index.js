@@ -7,11 +7,15 @@ import * as fs from 'fs';
 import * as mume from '@shd101wyy/mume';
 
 mume.init();
-const NODE_ENV = require('electron').remote.process.env.NODE_ENV;
-console.log(NODE_ENV);
 
-// Webview for markdown preview.
+// Main WebView in which the markdown file is rendered
 const webview = document.getElementById('md-render');
+
+window.addEventListener('keydown', (event) => {
+  console.log('Key Pressed (Win)');
+  console.log(event);
+  handleKeyPressEvent(event);
+}, true);
 
 // Current mume engine, each new file gets a new engine
 let engine;
@@ -24,32 +28,6 @@ let curFile;
 let watcher = new chokidar.FSWatcher({
   usePolling: true,
 });
-
-/**
- * This method renders a markdown file in the webview created above
- * @param {string} path - The path of the file to load
- */
-async function renderMd(path) {
-  await mume.init();
-  const info = await mume.utility.tempOpen({prefix: 'mpe_preview',
-    suffix: '.html'});
-  let htmlFilePath = info.path;
-
-
-  let html = await engine.generateHTMLTemplateForPreview({
-  });
-  html = html.replace(
-        /<script type=\"text\/javascript\"[^><]*?contextmenu.*?><\/script>/g,
-        ''
-  );
-  await mume.utility.writeFile(htmlFilePath, html, {encoding: 'utf-8'});
-
-  if (webview.getURL() === htmlFilePath) {
-    webview.reload();
-  } else {
-    webview.loadURL(mume.utility.addFileProtocol(htmlFilePath));
-  }
-}
 
 watcher.on('add', (f) => {
   engine = new mume.MarkdownEngine({
@@ -122,6 +100,36 @@ ipcRenderer.on('file-opened', (event, file) => {
   watcher.add(file);
 });
 
+ipcRenderer.on('exportPDF', (event, file) => {
+  exportPDF();
+});
+
+/**
+ * This method renders a markdown file in the webview created above
+ * @param {string} path - The path of the file to load
+ */
+async function renderMd(path) {
+  await mume.init();
+  const info = await mume.utility.tempOpen({prefix: 'mpe_preview',
+    suffix: '.html'});
+  let htmlFilePath = info.path;
+
+
+  let html = await engine.generateHTMLTemplateForPreview({
+  });
+  html = html.replace(
+        /<script type=\"text\/javascript\"[^><]*?contextmenu.*?><\/script>/g,
+        ''
+  );
+  await mume.utility.writeFile(htmlFilePath, html, {encoding: 'utf-8'});
+
+  if (webview.getURL() === htmlFilePath) {
+    webview.reload();
+  } else {
+    webview.loadURL(mume.utility.addFileProtocol(htmlFilePath));
+  }
+}
+
 async function exportPDF() {
   const basename = path.basename(curFile, '.md');
   const basepath = path.join(path.dirname(curFile), basename);
@@ -172,6 +180,33 @@ async function exportPDF() {
   });
 };
 
-ipcRenderer.on('exportPDF', (event, file) => {
-  exportPDF();
-});
+function handleKeyPressEvent(event) {
+  console.log(`Pressed ${event.key}`);
+  switch (event.key) {
+    case 'j':
+      webview.executeJavaScript(
+        `document.getElementsByClassName('mume markdown-preview')[1].scrollTop += 100`
+      );
+      break;
+    case 'k':
+      webview.executeJavaScript(
+        `document.getElementsByClassName('mume markdown-preview')[1].scrollTop -= 100`
+      );
+      break;
+    case 'g':
+      webview.executeJavaScript(
+        `document.getElementsByClassName('mume markdown-preview')[1].scrollTop = 0`
+      );
+      break;
+    case 'G':
+      webview.executeJavaScript(
+        `document.getElementsByClassName('mume markdown-preview')[1].scrollTop = document.getElementsByClassName('mume markdown-preview')[1].scrollHeight`
+      );
+      break;
+    case 'q':
+      window.close();
+      break;
+    default:
+      break;
+  }
+};
